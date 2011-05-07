@@ -1,13 +1,15 @@
 <html>
 <head>
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
+include("CalToDb.php");
 
 if (isset($_POST["buttonClicked"]))
 {
  $target = "upload/"; 
- $target = $target . "random1234file3.ics"; 
+ $target = $target . uniqid(); 
  $ok=1; 
  
  $uploaded_size = $_FILES['uploaded']['size'];
@@ -38,6 +40,12 @@ if (isset($_POST["buttonClicked"]))
  if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $target)) 
  { 
  $msg = "The file ". basename( $_FILES['uploadedfile']['name']). " has been uploaded"; 
+ 
+ //Success!
+ insertIntoDb($target);
+ 
+ unlink($target);
+ 
  } 
  else 
  { 
@@ -55,8 +63,9 @@ if (isset($_POST["buttonClicked"]))
  <input type="submit" name="buttonClicked" value="Upload" />
  </form> 
  <?php
- 	echo $uploaded_size;
- 	echo $uploaded_type;
+ 	//echo $uploaded_size;
+ 	//echo $uploaded_type;
+ 	echo $target;
  	echo $msg;
  ?>
 </body>

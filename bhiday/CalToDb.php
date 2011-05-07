@@ -1,6 +1,8 @@
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
+function insertIntoDb($file) {
 
 //insert in database table!
 //opening mysql connection
@@ -22,7 +24,7 @@ if (!mysql_select_db($db_name,$handle)) {
 require_once("iCalcreator.class.php");
 
 $config = array( 	"unique_id" => "ucla.edu",
-					"filename" => "103873013.ics" );
+					"filename" => $file );
 
 $calObj = new vcalendar($config);
 $calObj->parse();
@@ -62,7 +64,7 @@ while (($component = $calObj->getComponent()) != FALSE)
 		
 		$query = "INSERT INTO fb_caltable (start_ts, end_ts, recur, end_recur, days, summary, description, location) VALUES ('$start_ts', '$end_ts', 'W', '$end_recur', '$days', '$summary', '$description', '$location')";
 
-		echo $query. '<br><br>';
+		//echo $query. '<br><br>';
 
 		$result = mysql_query($query);
 		if (!$result) 
@@ -73,6 +75,8 @@ while (($component = $calObj->getComponent()) != FALSE)
 }
 
 mysql_close($handle);
+
+}
 
 function array2datetime($arg)
 {
